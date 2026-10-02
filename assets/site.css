@@ -259,3 +259,11 @@ a.pg:hover { border-color: var(--zunda); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* 余談回：画像クレジット・出典 */
+.ref-h { font-size: 0.85rem; margin: 1rem 0 0.25rem; color: var(--fg); }
+.refs { margin: 0; padding-left: 1.2em; font-size: 0.82rem; overflow-wrap: anywhere; }
+.refs .ref-url { list-style: none; margin-left: -1.2em; padding-left: 1.2em; }
+
+/* トップページの再生リストの埋め込みは小さめ（各回のページの動画は変えない）。スマホ幅では 100% */
+.index .yt { max-width: 480px; }
