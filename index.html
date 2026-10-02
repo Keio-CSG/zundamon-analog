@@ -2,22 +2,19 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ずんだもんと学ぶアナログ回路</title>
-<style>
-  :root { --bg: #f4f7ef; --fg: #1d2318; --muted: #5b6652; --zunda: #5f8f22; }
-  @media (prefers-color-scheme: dark) { :root { --bg: #121418; --fg: #e8ecf0; --muted: #9aa3ad; --zunda: #8BC34A; color-scheme: dark; } }
-  body { margin: 0; background: var(--bg); color: var(--fg); font-family: "Hiragino Sans", "Noto Sans JP", sans-serif; }
-  main { max-width: 40rem; margin: 0 auto; padding: 4rem 1rem; }
-  h1 { color: var(--zunda); }
-  p { color: var(--muted); line-height: 1.8; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Zen+Maru+Gothic:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-<main>
-<h1>ずんだもんと学ぶアナログ回路</h1>
-<p>ずんだもんと四国めたんの掛け合いで、MOSFET の基礎から増幅回路・周波数特性まで学ぶウェブ教科書です。いま準備中です。</p>
-<p>VOICEVOX:ずんだもん / VOICEVOX:四国めたん / 立ち絵：坂本アヒル</p>
+<div class="topbar"><a href="index.html">ずんだもんと学ぶアナログ回路</a></div>
+<main class="site">
+<section class="index flow" id="top" aria-labelledby="series-title"><header class="idx-head"><p class="kicker">ウェブ教科書</p><h1 id="series-title">ずんだもんと学ぶアナログ回路</h1><p class="lead-1">回路理論は学んだけれど、トランジスタ回路は初めての学部生へ。動画の台本と画面から作った読みもの版です。</p><ul class="cast"><li class="metan"><span class="face" aria-hidden="true">め</span><span><b>四国めたん</b>（解説）</span></li><li class="zundamon"><span class="face" aria-hidden="true">ず</span><span><b>ずんだもん</b>（質問）</span></li></ul></header><h2 class="idx-h">各回の目次</h2><ol class="eps"><li class="ep-item ready"><span class="ep-no">第1回</span><div class="ep-main"><h3><a href="ep01.html">MOSFETのしくみと特性カーブ</a></h3><p class="blurb">電子回路の単位がピンチのずんだもんと一緒に、トランジスタのしくみを基礎から見ていきます。</p><ol class="chs"><li><a href="ep01.html#ep01-s1">導入：単位がピンチなのだ</a></li><li><a href="ep01.html#ep01-s2">今のICのトランジスタ＝CMOS</a></li><li><a href="ep01.html#ep01-s3">バイポーラとMOSFETの違い</a></li><li><a href="ep01.html#ep01-s4">MOSFETの記号と3つの端子</a></li><li><a href="ep01.html#ep01-s5">なぜ電流が流れる？ 断面で見るチャネル</a></li><li><a href="ep01.html#ep01-s6"><span class="sym">I<sub>D</sub></span>–<span class="sym">V<sub>GS</sub></span>特性と2乗則</a></li><li><a href="ep01.html#ep01-s7">サブスレッショルド領域</a></li><li><a href="ep01.html#ep01-s8"><span class="sym">I<sub>D</sub></span>–<span class="sym">V<sub>DS</sub></span>特性と線形領域</a></li><li><a href="ep01.html#ep01-s9">ピンチオフ</a></li><li><a href="ep01.html#ep01-s10">飽和領域と電圧制御電流源</a></li><li><a href="ep01.html#ep01-s11">まとめ：3つの動作領域</a></li><li><a href="ep01.html#ep01-s12">PMOSとCMOSインバータ</a></li><li><a href="ep01.html#ep01-s13">次回予告</a></li></ol></div></li><li class="ep-item"><span class="ep-no">第2回</span><div class="ep-main"><h3>チャネル長変調・出力抵抗と基板バイアス効果<span class="soon">準備中</span></h3><p class="blurb">実験レポートの特性グラフが、飽和領域なのに少し右上がり……その正体を探ります。</p></div></li><li class="ep-item"><span class="ep-no">第3回</span><div class="ep-main"><h3><span class="sym">g<sub>m</sub></span>とソース接地増幅回路<span class="soon">準備中</span></h3><p class="blurb">MOSFETで信号を増幅するカギは、相互コンダクタンス <span class="sym">g<sub>m</sub></span> と小信号モデル。</p></div></li><li class="ep-item"><span class="ep-no">第4回</span><div class="ep-main"><h3>カレントミラーと能動負荷<span class="soon">準備中</span></h3><p class="blurb">設計課題で、<span class="sym">R<sub>D</sub></span>を大きくしたら増幅しなくなった……その理由と解決策を見ていきます。</p></div></li><li class="ep-item"><span class="ep-no">第5回</span><div class="ep-main"><h3>ソースフォロワとゲート接地：3つの基本増幅回路<span class="soon">準備中</span></h3><p class="blurb">増幅回路に負荷をつないだら利得が激減……その対策として、ソースフォロワとゲート接地を見ていきます。</p></div></li><li class="ep-item"><span class="ep-no">第6回</span><div class="ep-main"><h3>カスコード：出力抵抗を大きくする<span class="soon">準備中</span></h3><p class="blurb">電源電圧はそのままで、もっと利得を上げたい……そこで登場するのがカスコードです。</p></div></li><li class="ep-item"><span class="ep-no">第7回</span><div class="ep-main"><h3>差動対<span class="soon">準備中</span></h3><p class="blurb">マイクのノイズが消えない……2つの入力の「差」だけを増幅する差動対で解決できるのか見ていきます。</p></div></li><li class="ep-item"><span class="ep-no">第8回</span><div class="ep-main"><h3>周波数特性①：MOSFETの容量とミラー効果<span class="soon">準備中</span></h3><p class="blurb">周波数を上げたら利得が計算より小さい……原因はMOSFETの中の容量です。</p></div></li><li class="ep-item"><span class="ep-no">第9回</span><div class="ep-main"><h3>周波数特性②：極・零点と多段回路<span class="soon">準備中</span></h3><p class="blurb">2段にしたら帯域がぐっと狭くなった……極と零点で理由を読み解きます。</p></div></li></ol></section>
 </main>
+<script src="assets/model.js"></script>
+<script src="assets/widgets.js"></script>
 </body>
 </html>
