@@ -6,6 +6,9 @@
  */
 (function () {
   "use strict";
+  var EN = document.documentElement.lang === "en";
+  var labels = window.ZWidgetEnglish || {};
+  function tr(s) { return EN && Object.prototype.hasOwnProperty.call(labels, s) ? labels[s] : s; }
   var M = window.ZModel;
   var NS = "http://www.w3.org/2000/svg";
   var DEV = M.DEVICE;
@@ -16,9 +19,9 @@
     curves: ["#4FC3F7", "#81C784", "#FFB74D", "#E57373"], off: "#5A606B", wire: "#DDDDDD"
   };
   var REGION = {
-    cutoff: "遮断（サブスレッショルド）",
-    linear: "線形領域",
-    sat: "飽和領域"
+    cutoff: tr("遮断（サブスレッショルド）"),
+    linear: tr("線形領域"),
+    sat: tr("飽和領域")
   };
 
   // ---- 小さな道具 --------------------------------------------------------------
@@ -165,7 +168,7 @@
     function upd() {
       var s = fmt(Number(inp.value));
       out.textContent = s;
-      inp.setAttribute("aria-valuetext", s.replace(/ V$/, " ボルト"));
+      inp.setAttribute("aria-valuetext", s.replace(/ V$/, tr(" ボルト")));
     }
     inp.addEventListener("input", upd);
     upd();
@@ -204,7 +207,7 @@
 
   function chip(panel) {
     var wrap = h("p", { "class": "w-region", "aria-live": "polite" }, panel);
-    h("span", { "class": "w-region-l" }, wrap, "動作領域");
+    h("span", { "class": "w-region-l" }, wrap, tr("動作領域"));
     var c = h("span", { "class": "chip" }, wrap);
     return function (r) { c.textContent = REGION[r]; c.className = "chip " + r; };
   }
@@ -248,7 +251,7 @@
   function bench(root, S, init, uid) {
     var st = stage(root);
     var s = svg("svg", { viewBox: "0 0 400 262", "class": "w-svg w-svg-c", role: "img", color: C.wire,
-      "aria-label": "NMOS の測定回路。ゲートとソースの間に VGS、ドレインとソースの間に VDS の電源をつなぎ、ドレイン電流 ID を見る" }, st);
+      "aria-label": tr("NMOS の測定回路。ゲートとソースの間に VGS、ドレインとソースの間に VDS の電源をつなぎ、ドレイン電流 ID を見る") }, st);
     var X = 175, Y = 135;
     var ch = nmosSymbol(s, X, Y, true);
     var chOff = line(s, X, Y - 32, X, Y + 32, { stroke: "none", w: 2.5, dash: "4 4" });
@@ -296,14 +299,14 @@
   function transfer(root, S, init, uid) {
     var st = stage(root);
     var s = svg("svg", { viewBox: "0 0 420 300", "class": "w-svg w-svg-g", role: "img",
-      "aria-label": "ID–VGS 特性のグラフ（VDS 一定）" }, st);
+      "aria-label": tr("ID–VGS 特性のグラフ（VDS 一定）") }, st);
     var xmax = Math.max.apply(null, S.VGS_LIST), vds = S.VDS_FIX;
     var box = { x: 64, y: 30, w: 336, h: 218 };
     var layer = svg("g", {}, s);
     var panel = h("div", { "class": "w-panel" }, root);
-    var scale = segmented(panel, uid + "-scale", "縦軸", [["lin", "線形"], ["log", "対数"]], init.scale || "lin");
+    var scale = segmented(panel, uid + "-scale", tr("縦軸"), [["lin", tr("線形")], ["log", tr("対数")]], init.scale || "lin");
     var inG = slider(panel, uid + "-vgs", hs("V_{GS}"), 0, xmax, 0.01, init.vgs, vfmt, C.vgs);
-    var ro = readouts(panel, [["vds", hs("V_{DS}") + "（一定）"], ["id", hs("I_{D}")]]);
+    var ro = readouts(panel, [["vds", hs("V_{DS}") + tr("（一定）")], ["id", hs("I_{D}")]]);
     ro.vds.textContent = vfmt(vds);
     var setRegion = chip(panel);
     var slope = h("p", { "class": "w-sub" }, panel);
@@ -317,25 +320,25 @@
       } else {
         yr = [0, niceMax(M.drainCurrent(vds, xmax), 4).max];
       }
-      P = new Plot(layer, box, [0, xmax], yr, { log: log, xlabel: "V_{GS} [V]", ylabel: log ? "I_{D}（対数軸）" : "I_{D} [mA]" });
+      P = new Plot(layer, box, [0, xmax], yr, { log: log, xlabel: "V_{GS} [V]", ylabel: log ? tr("I_{D}（対数軸）") : "I_{D} [mA]" });
       var xv = P.sx(DEV.VTH);
       if (log) {
         svg("rect", { x: box.x, y: box.y, width: xv - box.x, height: box.h, fill: C.id, opacity: 0.08 }, layer);
-        text(layer, box.x + 6, box.y + 14, "サブスレッショルド", { fs: 11, fill: C.id });
+        text(layer, box.x + 6, box.y + 14, tr("サブスレッショルド"), { fs: 11, fill: C.id });
       }
       line(layer, xv, box.y, xv, box.y + box.h, { stroke: "var(--screen-fg)", w: 1.2, dash: "3 4" });
       // 対数軸では点の数値ラベル（Vth の右上を通る）と重ならないよう、Vth の線の左（遮断側）に置く
       text(layer, log ? xv - 5 : xv + 5, box.y + (log ? 32 : 14), "V_{th} = " + vfmt(DEV.VTH),
         { fs: 11, anchor: log ? "end" : "start" });
-      text(layer, box.x + box.w - 4, log ? box.y + box.h - 8 : box.y + 14, "V_{DS} = " + vfmt(vds) + "（一定）",
+      text(layer, box.x + box.w - 4, log ? box.y + box.h - 8 : box.y + 14, "V_{DS} = " + vfmt(vds) + tr("（一定）"),
         { anchor: "end", fs: 11, fill: C.vds });
       svg("path", { d: P.path(function (v) { var i = M.drainCurrent(vds, v); return log ? i * 1e-3 : i; }, 0, xmax),
         fill: "none", stroke: C.curves[3], "stroke-width": 2.5 }, layer);
       dot = svg("circle", { r: 5, fill: C.id, stroke: "var(--screen)", "stroke-width": 1.5 }, layer);
       tdot = text(layer, 0, 0, "", { fs: 12, fill: C.id, cls: "mono" });
       slope.innerHTML = log
-        ? "このモデルでは " + hs("V_{GS}") + " が約 <span class=\"w-num\">" + (DEV.S_SLOPE * 1e3).toFixed(1) +
-          " mV</span> 変わるごとに電流が1桁変わる（常温の下限は約 <span class=\"w-num\">" + (DEV.S_MIN * 1e3).toFixed(1) + " mV</span>）"
+        ? tr("このモデルでは ") + hs("V_{GS}") + tr(" が約 <span class=\"w-num\">") + (DEV.S_SLOPE * 1e3).toFixed(1) +
+          tr(" mV</span> 変わるごとに電流が1桁変わる（常温の下限は約 <span class=\"w-num\">") + (DEV.S_MIN * 1e3).toFixed(1) + tr(" mV</span>）")
         : "";
       slope.hidden = !log;
       upd();
@@ -362,7 +365,7 @@
   function output(root, S, init, uid) {
     var st = stage(root);
     var s = svg("svg", { viewBox: "0 0 420 300", "class": "w-svg w-svg-g", role: "img",
-      "aria-label": "ID–VDS 特性のグラフ。VGS ごとの曲線と、線形領域と飽和領域の境界（点線）" }, st);
+      "aria-label": tr("ID–VDS 特性のグラフ。VGS ごとの曲線と、線形領域と飽和領域の境界（点線）") }, st);
     var xmax = S.VDS_MAX, list = S.VGS_LIST;
     var box = { x: 54, y: 30, w: 340, h: 218 };
     var top = 0;
@@ -372,8 +375,8 @@
     var vovMax = Math.max.apply(null, list) - DEV.VTH;
     svg("path", { d: P.path(function (v) { return M.drainCurrent(v, v + DEV.VTH); }, 0, vovMax, 80),
       fill: "none", stroke: "var(--screen-fg)", "stroke-width": 1.4, "stroke-dasharray": "3 4" }, s);
-    text(s, P.sx(vovMax * 0.4), box.y + 14, "線形", { anchor: "middle", fs: 12, fill: "var(--screen-muted)" });
-    text(s, P.sx((vovMax + xmax) / 2), box.y + 14, "飽和", { anchor: "middle", fs: 12, fill: "var(--screen-muted)" });
+    text(s, P.sx(vovMax * 0.4), box.y + 14, tr("線形"), { anchor: "middle", fs: 12, fill: "var(--screen-muted)" });
+    text(s, P.sx((vovMax + xmax) / 2), box.y + 14, tr("飽和"), { anchor: "middle", fs: 12, fill: "var(--screen-muted)" });
     var curves = list.map(function (g, i) {
       var col = C.curves[i % C.curves.length];
       var c = svg("path", { d: P.path(function (v) { return M.drainCurrent(v, g); }, 0, xmax), fill: "none",
@@ -390,7 +393,7 @@
     var gsel = segmented(panel, uid + "-vgs", hs("V_{GS}"), list.map(function (g) { return [g, M.fmtV(g, 1) + " V"]; }),
       init.vgs !== undefined ? init.vgs : list[list.length - 1]);
     var inD = slider(panel, uid + "-vds", hs("V_{DS}"), 0, xmax, 0.01, init.vds, vfmt, C.vds);
-    var ro = readouts(panel, [["id", hs("I_{D}")], ["sat", "境界 " + hs("V_{GS} − V_{th}")]]);
+    var ro = readouts(panel, [["id", hs("I_{D}")], ["sat", tr("境界 ") + hs("V_{GS} − V_{th}")]]);
     var setRegion = chip(panel);
 
     function upd() {
@@ -425,7 +428,7 @@
     var VDD = S.VDD, KP = S.KP_INV;
     var st = stage(root);
     var c = svg("svg", { viewBox: "0 0 320 300", "class": "w-svg w-svg-c", role: "img", color: C.wire,
-      "aria-label": "CMOS インバータの回路図。上が PMOS、下が NMOS。オンのトランジスタを色で示す" }, st);
+      "aria-label": tr("CMOS インバータの回路図。上が PMOS、下が NMOS。オンのトランジスタを色で示す") }, st);
     var X = 170;
     line(c, 160, 30, 250, 30, { stroke: C.id, w: 3 });
     text(c, 152, 35, "V_{DD} = " + vfmt(VDD), { anchor: "end", fs: 12, fill: C.id });
@@ -456,15 +459,15 @@
     line(c, X + 30, 150, 276, 150);
     svg("circle", { cx: 280, cy: 150, r: 4.5, fill: "var(--screen)", stroke: "currentColor", "stroke-width": 2 }, c);
     ground(c, X + 30, 262);
-    text(c, 36, 134, "入力", { anchor: "middle", fs: 12, fill: "var(--screen-muted)" });
+    text(c, 36, 134, tr("入力"), { anchor: "middle", fs: 12, fill: "var(--screen-muted)" });
     var tIn = text(c, 36, 176, "", { anchor: "middle", fs: 12, fill: C.vgs, cls: "mono" });
-    text(c, 280, 134, "出力", { anchor: "middle", fs: 12, fill: "var(--screen-muted)" });
+    text(c, 280, 134, tr("出力"), { anchor: "middle", fs: 12, fill: "var(--screen-muted)" });
     var tOut = text(c, 280, 176, "", { anchor: "middle", fs: 12, fill: C.vds, cls: "mono" });
     var tagP = text(c, X + 40, 93, "", { fs: 12, weight: 700 });
     var tagN = text(c, X + 40, 217, "", { fs: 12, weight: 700 });
 
     var g2 = svg("svg", { viewBox: "0 0 320 300", "class": "w-svg w-svg-g2", role: "img",
-      "aria-label": "インバータの入出力特性（VIN と VOUT の関係）" }, st);
+      "aria-label": tr("インバータの入出力特性（VIN と VOUT の関係）") }, st);
     var box = { x: 50, y: 30, w: 252, h: 214 };
     var P = new Plot(g2, box, [0, VDD], [0, VDD], { xlabel: "V_{IN} [V]", ylabel: "V_{OUT} [V]" });
     var vm = M.invVm(VDD, KP);
@@ -476,13 +479,13 @@
 
     var panel = h("div", { "class": "w-panel" }, root);
     var inV = slider(panel, uid + "-vin", hs("V_{IN}"), 0, VDD, 0.01, init.vin || 0, vfmt, C.vgs);
-    var ro = readouts(panel, [["vout", hs("V_{OUT}")], ["idd", "電源電流 " + hs("I_{DD}")]]);
+    var ro = readouts(panel, [["vout", hs("V_{OUT}")], ["idd", tr("電源電流 ") + hs("I_{DD}")]]);
     var state = h("p", { "class": "w-region", "aria-live": "polite" }, panel);
     h("p", { "class": "w-sub" }, panel,
-      "条件：" + hs("V_{DD}") + " = <span class=\"w-num\">" + vfmt(VDD) + "</span>、PMOS の W/L は NMOS の " +
-      "<span class=\"w-num\">" + M.pyG(KP / DEV.KP, 3) + "</span> 倍（" + hs("K_{p}") + " = <span class=\"w-num\">" +
-      M.pyG(KP, 3) + " mA/V²</span>、NMOS の K = <span class=\"w-num\">" + M.pyG(DEV.K, 3) + " mA/V²</span>）。" +
-      "点線は入力と出力が等しくなる点");
+      tr("条件：") + hs("V_{DD}") + " = <span class=\"w-num\">" + vfmt(VDD) + tr("</span>、PMOS の W/L は NMOS の ") +
+      "<span class=\"w-num\">" + M.pyG(KP / DEV.KP, 3) + tr("</span> 倍（") + hs("K_{p}") + " = <span class=\"w-num\">" +
+      M.pyG(KP, 3) + tr(" mA/V²</span>、NMOS の K = <span class=\"w-num\">") + M.pyG(DEV.K, 3) + tr(" mA/V²</span>）。") +
+      tr("点線は入力と出力が等しくなる点"));
 
     function upd() {
       var vin = Number(inV.value);
@@ -490,9 +493,9 @@
       var nOn = vin > DEV.VTH, pOn = VDD - vin > DEV.VTHP;      // ep01.py の「オン／オフ」の札と同じ条件
       gp.setAttribute("color", pOn ? C.pmos : C.off);
       gn.setAttribute("color", nOn ? C.nmos : C.off);
-      tagP.textContent = "PMOS " + (pOn ? "オン" : "オフ");
+      tagP.textContent = "PMOS " + (pOn ? tr("オン") : tr("オフ"));
       tagP.setAttribute("fill", pOn ? C.pmos : "var(--screen-muted)");
-      tagN.textContent = "NMOS " + (nOn ? "オン" : "オフ");
+      tagN.textContent = "NMOS " + (nOn ? tr("オン") : tr("オフ"));
       tagN.setAttribute("fill", nOn ? C.nmos : "var(--screen-muted)");
       tIn.textContent = vfmt(vin);
       tOut.textContent = vfmt(vout);
@@ -500,8 +503,8 @@
       ro.vout.textContent = vfmt(vout);
       ro.idd.textContent = M.fmtCurrent(idd);
       var both = pOn && nOn;
-      state.innerHTML = '<span class="w-region-l">オンのトランジスタ</span><span class="chip ' +
-        (both ? "both" : pOn ? "pon" : "non") + '">' + (both ? "両方オン（電流が流れる）" : pOn ? "PMOS だけ" : "NMOS だけ") + "</span>";
+      state.innerHTML = tr('<span class="w-region-l">オンのトランジスタ</span><span class="chip ') +
+        (both ? "both" : pOn ? "pon" : "non") + '">' + (both ? tr("両方オン（電流が流れる）") : pOn ? tr("PMOS だけ") : tr("NMOS だけ")) + "</span>";
     }
     inV.addEventListener("input", upd);
     upd();
@@ -525,7 +528,7 @@
         kind(mount, sceneOf(fig.getAttribute("data-ep")), JSON.parse(fig.getAttribute("data-init") || "{}"), fig.id);
         mount.setAttribute("data-ready", "1");
       } catch (err) {
-        mount.textContent = "この図を表示できませんでした（" + err.message + "）";
+        mount.textContent = tr("この図を表示できませんでした（") + err.message + tr("）");
       }
     });
   }
