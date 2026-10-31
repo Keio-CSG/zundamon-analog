@@ -131,8 +131,6 @@ html[lang="en"] .bubble { overflow-wrap: break-word; }
 .toc ol { margin: 0; padding-left: 1.7em; font-size: 0.95rem; line-height: 1.75; }
 .toc li::marker { font-family: var(--font-mono); color: var(--muted); font-size: 0.85em; }
 .tc { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); white-space: nowrap; font-weight: 400; letter-spacing: 0; }
-a.tc { color: var(--muted); }
-.toc .tc { margin-left: 0.4rem; }
 
 /* ---- 節 ---- */
 .sec { margin-top: 2.8rem; }
@@ -183,7 +181,7 @@ a.tc { color: var(--muted); }
 }
 .fig img { display: block; width: 100%; height: auto; border-radius: 6px; }
 .fig figcaption { display: flex; justify-content: flex-end; padding: 0.3rem 0.35rem 0; }
-.screen .tc, .screen a.tc { color: var(--screen-muted); }
+.screen .tc { color: var(--screen-muted); }
 .screen :focus-visible { outline-color: var(--c-id); }
 
 .widget { padding: 0.8rem; }
